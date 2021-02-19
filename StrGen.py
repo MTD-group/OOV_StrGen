@@ -17,16 +17,13 @@ from StrGen_functions import Write_POSCAR
 # pattern_length=1
 # pattern_index=1
 # pattern=pattern_list[pattern_index]
-pattern='AV OO AO OO'  # Define one pattern from 'pattern_list' below
+pattern='AO VO AO VO AO OO AO OO'  # Define one pattern from 'pattern_list' below
 trans_vector=1/6       # Define one translation vector from 't_list' below
 CN_str=0
 a=4
 t=1/6
-L=2
 A = 'Sr'
 B = 'Fe'
-
-
 
 
 #########################################
@@ -47,6 +44,7 @@ pattern_list=['AV OO AO OO',					# pattern1 (L1_vac1)
 			  'AO VO AO OO AO OV AO OO']		# pattern9 (L2_vac7) 
 # translational vectors along L direction.
 # L=1 is compatible with t=1/6 and 2/3 only because of the shorter length
+
 t_list=[1/6, 2/3, 7/6, 5/3]
 
 #### A_array_default data
@@ -83,6 +81,7 @@ def find(s, ch):
 # Change file name based on whether alternative stacking is applied
 # if flag_handed==0: # Structure generated without alternative stacking
 pattern_length=int(len(find(pattern,'A'))/2)
+L=pattern_length
 # index starts from 1. restarts for different length
 if pattern_length == 2:
     pattern_index=pattern_list.index(pattern)-1
@@ -122,13 +121,15 @@ else:
 
 
 ### Remove Oxygen depending on the pattern
-vacancy_indicies=find(pattern,'V')
-### TBD
-
+vacancy_indicies=find(pattern.replace(" ", ""),'V')
+### Oxygen indicies in pattern
+O_indicies=[-1,0, 1,2, -1,3,4,5, -1,6,7,8, -1,9, 10, 11]
+rows_to_delete=[O_indicies[v] for v in vacancy_indicies]
+O_array=np.delete(O_array,rows_to_delete,axis=0)
 
 ### Identify CN array
 ### TBD
-### TEST line for gitgub
+
 
 # Alternative stacking
 # If alternative stacking is possible, that case will be also covered
