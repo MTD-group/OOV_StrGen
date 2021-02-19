@@ -19,17 +19,17 @@ from StrGen_functions import Write_POSCAR
 # pattern=pattern_list[pattern_index]
 pattern='AO VO AO VO AO OO AO OO'  # Define one pattern from 'pattern_list' below
 trans_vector=1/6       # Define one translation vector from 't_list' below
-CN_str=0
-a=4
-t=1/6
-A = 'Sr'
-B = 'Fe'
+alternative_staking=True # Whether will apply opposite handedness upon stacking
+a=4   # default pseudocubic lattice parameter
+A = 'Sr' # A-cation element appearing in POSCAR
+B = 'Fe' # B-cation element appearing in POSCAR
+
 
 
 #########################################
 ######### Data for OOV structure ########
 #########################################
-
+t=trans_vector
 # Layer vacancy pattern on AO3 layer, where 'V' denotes oxygen vacancy
 # B-cation is omitted as they are positioned between AO3 layers
 # Pristine layer is "AO OO AO OO' for L=1, and "AO OO AO OO AO OO AO OO" for L=2
@@ -51,17 +51,6 @@ t_list=[1/6, 2/3, 7/6, 5/3]
 A_array_data=np.array([[0,0,0],[0.5,0.5,0]])    
 
 #### Atomic position of oxygens in ABO3 chemistry. Vacancy sites will be removed from this full list
-# O_list_full=list([[0.5,0,0], [0.75,0.25,0], 
-#                   [0.25, 0.25, 0], [0, 0.5, 0],
-#                    [0.75, 0.75, 0], [0.25, 0.75, 0]])
-# # O positions with full AO3 layer.
-# O_list_full=list([[0.5,0,0], [0.75,0.25,0], [0.25,0.25,0], [0,0.5,0], [0.75,0.75,0], [0.25,0.75,0]])
-# O_list=list([[0.25,0,0], [0.75,0,0], [0.125,0.125,0], [0.375,0.125,0], 
-                   # [0.625,0.125,0], [0.875,0.125,0], [0,0.25,0], [0.5,0.25,0],
-                   # [0.125,0.375,0], [0.375,0.375,0], [0.625,0.375,0], [0.875,0.375,0], 
-                   # [0.25,0.5,0], [0.75,0.5,0], [0.125,0.625,0], [0.375,0.625,0], 
-                   # [0.625,0.625,0], [0.875,0.625,0], [0,0.75,0], [0.5,0.75,0],
-                   # [0.125,0.875,0], [0.375,0.875,0], [0.625,0.875,0], [0.875,0.875,0]])
 O_array_data=np.array([[0.5,0,0], [0.75,0.25,0], 
                   [0.25, 0.25, 0], [0, 0.5, 0],
                    [0.75, 0.75, 0], [0.25, 0.75, 0]])
@@ -87,7 +76,7 @@ if pattern_length == 2:
     pattern_index=pattern_list.index(pattern)-1
 else:
     pattern_index=pattern_list.index(pattern)+1
-filename="L{0}_vac{1}_t{2:.3f}.vasp".format(pattern_length,
+filename="L{0}_vac{1}_t{2:.2f}".format(pattern_length,
                                             pattern_index,
                                             trans_vector)
 
@@ -123,13 +112,27 @@ else:
 ### Remove Oxygen depending on the pattern
 vacancy_indicies=find(pattern.replace(" ", ""),'V')
 ### Oxygen indicies in pattern
-O_indicies=[-1,0, 1,2, -1,3,4,5, -1,6,7,8, -1,9, 10, 11]
-rows_to_delete=[O_indicies[v] for v in vacancy_indicies]
+O_labels=[-1,0, 1,2, -1,3,4,5, -1,6,7,8, -1,9, 10, 11]
+rows_to_delete=[O_labels[v] for v in vacancy_indicies]
 O_array=np.delete(O_array,rows_to_delete,axis=0)
 
 ### Identify CN array
-### TBD
-
+# coordination array: size is equal to the number of B-cations
+coordination_list=[ 0 for i in range(2*pattern_length)]
+t_index=t_list.index(t)
+shift_array=np.array([1,2,3,4])
+for v in vacancy_indicies:
+    O_labels[v] = -1
+O_indicies=np.array([int(x!=-1) for x in O_labels])
+O_indicies=np.concatenate((O_indicies,O_indicies))
+shift_value=shift_array[t_index]
+# this array represent the next layer
+shifted_O_indicies=np.roll(O_indicies,4*shift_value-2)
+for i in range(len(coordination_list)):
+    coordination_list[i] = \
+        sum(O_indicies[4*i+2:4*i+6])+sum(shifted_O_indicies[4*i+2:4*i+6])
+coordination_list.sort(reverse=True)
+CN_str=" ".join('%i' % entry for entry in coordination_list)
 
 # Alternative stacking
 # If alternative stacking is possible, that case will be also covered
@@ -151,13 +154,6 @@ if pattern_list.index(pattern) in handed_list:
     temp_O=copy.deepcopy(O_array)
     temp_O[:,0]=1-temp_O[:,0]-np.floor((1-temp_O[:,0]))
     temp_O[:,2]=temp_O[:,2]+0.5
-    # for i in range(len(O_array)):
-    # for O_site in O_list:
-    #     temp=copy.deepcopy(O_site)
-    #     temp[0]=1-temp[0]
-    #     temp[2]=temp[2]+0.5
-    #     temp_O.append(temp)
-    # O_list=O_list+temp_O
     filename+='_alt'
 
 
@@ -170,4 +166,4 @@ lattice = np.array([[a*np.sqrt(2), 0, 0],
 lattice[2,:]=lattice[2,:]*(flag_handed+1)
 
 ## Write_POSCAR
-Write_POSCAR(filename,CN_str,lattice,A_array,B_array,O_array, A='Sr', B='Fe')
+Write_POSCAR(filename+'.vasp',CN_str,lattice,A_array,B_array,O_array, A='Sr', B='Fe')
