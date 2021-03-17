@@ -5,8 +5,9 @@ Unlike conventional structure-generation algorithms, this code starts from close
 
 ### GUI
 We additionally developed GUI-version of this code on MATLAB environment.
-You can run *StructureGenerator.m*, which will generate a POSCAR file (structure file for VASP) of oxygen-deficient *AB*O<sub>2.5</sub> structure with input parameters of your choice. Among parameters shown in the figure below, the pattern length, pattern, and translational vector are key parameters determining vacancy pattern.
+You can run *StructureGenerator.m*, which will generate a POSCAR file (structure file for VASP) of oxygen-deficient *AB*O<sub>2.5</sub> structure with input parameters of your choice. Among parameters shown in the figure below, the pattern length, pattern, and translational vector are key parameters determining vacancy pattern.</br>
 ![alt text](https://github.com/MTD-group/OOV_StrGen/blob/main/GUI_Matlab/GUI_outlook.png?raw=true)
+
 
 ### Structure data
 The parameters covered by this code can generate 50 structures of oxygen-deficient perovskites, which are collected in *Generated_structures* folder. The filename of structure is defined based on the *length of unit later*, *vacancy pattern*, *translation vector upon stacking*, and *the use of alternative stacking*.
