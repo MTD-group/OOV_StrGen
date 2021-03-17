@@ -6,6 +6,7 @@ Unlike conventional structure-generation algorithms, this code starts from close
 ### GUI
 We additionally implemented GUI-version of this code in MATLAB.
 You can run *StructureGenerator.m*, which will guide you to selections of layer vacancy patterns and compatible translation vectors.
+![alt text](https://github.com/MTD-group/OOV_StrGen/blob/main/GUI_Matlab/GUI_outlook.png?raw=true)
 
 ### Structure data
 Generated structures are collected in *Generated_structures* folder. The filename of structure is defined based on the *length of unit later*, *vacancy pattern*, *translation vector upon stacking*, and *the use of alternative stacking*.
