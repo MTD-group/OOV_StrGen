@@ -1,9 +1,7 @@
 # OOV_StrGen
 Script for generating various vacancy patterns in perovskite matrix. 
 
-Unlike conventional structure-generation algorithms, this code start from close-packed planes in *AB*O<sub>3</sub> perovskite, which is (111) plane. Poeppelmeier et al. made an elegant observation of oxygen-deficient perovskites that each phase possess a specific layer vacancy pattern. By utilizing this finding, we generate *AB*O<sub>2.5</sub> with various oxygen vacancy arrangements.
-
-
+Unlike conventional structure-generation algorithms, this code starts from close-packed planes in *AB*O<sub>3</sub> perovskite, which is (111) plane. Poeppelmeier *et al.* made an elegant observation of oxygen-deficient perovskites that each phase possesses a specific layer vacancy pattern on *A*O<sub>3</sub> layers. By reversing this finding, we generate planer vacancy patterns and stack along [100] perovskite direction to construct 3-dimensional atomic structure. We adopt the sample stoichiometry of *AB*O<sub>2.5</sub>, and the 50 structures generated with this algorithm covers prototypical examples of oxygen-deficient perovskites with ordered vacancies.
 
 ### GUI
 We additionally implemented GUI-version of this code in MATLAB.
