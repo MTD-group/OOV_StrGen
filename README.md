@@ -12,5 +12,5 @@ Generated structures are collected in *Generated_structures* folder. The filenam
 
 For example *L2_vac1_t0.17_alt.vasp* is generated from vacancy pattern 1 of length2, and translation vector of 1/6. And the layer pattern is mirrored upon every stacking.
 
-We note that the structures are defined by *A*<sub>2.5</sub> layer and stacking, which makes the outlook of structures parallelopied regardless of space group of each structure. For first-principles calculations, we recommend users to convert the generated structures to cif file and export to POSCAR format.
+We note that the structures are defined by *A*O<sub>2.5</sub> layer and stacking, which makes the outlook of structures parallelopied regardless of space group of each structure. For first-principles calculations, we recommend users to convert the generated structures to cif file and export to POSCAR format.
 
